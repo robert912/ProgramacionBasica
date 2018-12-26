@@ -15,7 +15,7 @@ dibujarlinea("red", 149, 149, 151, 151, papel);
 
 function dibujarTeclado(evento)
 {
-  var color = "blue";
+  var color = "green";
   var movimiento = 10;
   switch(evento.keyCode)
   {
