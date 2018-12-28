@@ -12,6 +12,8 @@ for (var i = 0; i < 10; i++)
 var vk = document.getElementById("villaKof");
 var papel = vk.getContext("2d");
 
+
+
 var fondo = {
     url: "tile.png",
     cargaOk: false
@@ -46,14 +48,12 @@ pollo.imagen = new Image();
 pollo.imagen.src = pollo.url;
 pollo.imagen.addEventListener("load", cargarPollos);
 
-function cargarFondo()
-{
+function cargarFondo()  {
     fondo.cargaOk = true;
     dibujar();
 }
 
-function cargarVacas()
-{
+function cargarVacas()  {
     vaca.cargaOk = true;
     dibujar();
 }
@@ -68,36 +68,111 @@ function cargarPollos() {
     dibujar();
 }
 
-function dibujar()
-{
+var xvaca = [];
+var yvaca = [];
+
+var xpollo = [];
+var ypollo = [];
+
+var xcerdo = 0;
+var ycerdo = 0;
+
+var cantidad = 10;
+
+function dibujar() {
     if (fondo.cargaOk)
         papel.drawImage(fondo.imagen, 0, 0);
 
     if (vaca.cargaOk)
-        for (var v = 0; v < 10; v++)
-        {
-            var x = aleatorio(0, 420);
-            var y = aleatorio(0, 420);
-            papel.drawImage(vaca.imagen, x, y);
+        for (var v = 0; v < cantidad; v++) {
+            xvaca[v] = 50 * aleatorio(0, 7);
+            yvaca[v] = 50 * aleatorio(0, 7);
+            papel.drawImage(vaca.imagen, xvaca[v], yvaca[v]);
         }
 
-    if (cerdo.cargaOk) {
-        var x = aleatorio(0, 420);
-        var y = aleatorio(0, 420);
-        papel.drawImage(cerdo.imagen, x, y);
-    }
     if (pollo.cargaOk)
-        for (var v = 0; v < 10; v++)
-        {
-            var x = aleatorio(0, 420);
-            var y = aleatorio(0, 420);
-            papel.drawImage(pollo.imagen, x, y);
+        for (var v = 0; v < cantidad; v++) {
+            xpollo[v] = 50 * aleatorio(0, 7);
+            ypollo[v] = 50 * aleatorio(0, 7);
+            papel.drawImage(pollo.imagen, xpollo[v], ypollo[v]);
         }
+    if (cerdo.cargaOk) {
+        xcerdo = aleatorio(0, 420);
+        yverdo = aleatorio(0, 420);
+        papel.drawImage(cerdo.imagen, xcerdo, ycerdo);
+
+
+    }
 }
+
+function dibujarMovimiento(xcerdo, ycerdo) {
+    if (fondo.cargaOk)
+        papel.drawImage(fondo.imagen, 0, 0);
+
+    if (cerdo.cargaOk) {
+        //console.log("llego hasta el cerdo");
+        papel.drawImage(cerdo.imagen, xcerdo, ycerdo);
+    }
+
+    if (vaca.cargaOk)
+        for (var i = 0; i < cantidad; i++)
+        papel.drawImage(vaca.imagen, xvaca[i], yvaca[i]);
+
+    if (pollo.cargaOk)
+        for (var i = 0; i < cantidad; i++)
+        papel.drawImage(pollo.imagen, xpollo[i], ypollo[i]);
+}
+
+
 
 function aleatorio(min, max)
 {
     var resultado;
     resultado = Math.floor(Math.random()*(max - min + 1)) +min;
     return resultado;
+}
+
+document.addEventListener("keydown", dibujarTeclado);
+
+function dibujarTeclado(evento)
+{
+    var movimiento = 50;
+    var teclas = {
+        LEFT: 37,
+        RIGHT: 39,
+        UP: 38,
+        DOWN: 40
+    };
+
+    switch (evento.keyCode) {
+        case teclas.UP:
+
+            ycerdo = ycerdo - movimiento;
+            dibujarMovimiento(xcerdo, ycerdo);
+            break;
+
+        case teclas.DOWN:
+
+            ycerdo = ycerdo + movimiento;
+            dibujarMovimiento(xcerdo, ycerdo);
+            //console.log("abajo"); 
+            break;
+
+        case teclas.LEFT:
+
+            xcerdo = xcerdo - movimiento;
+            dibujarMovimiento(xcerdo, ycerdo);
+            //console.log("Izquierda"); 
+            break;
+
+        case teclas.RIGHT:
+
+            xcerdo = xcerdo + movimiento;
+            dibujarMovimiento(xcerdo, ycerdo);
+            //console.log("Derecha"); 
+            break;
+
+        default:
+            break;
+    }
 }
